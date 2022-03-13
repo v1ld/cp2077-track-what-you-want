@@ -1,6 +1,10 @@
+/* Track What You Want; (c) v1ld, 2022-03-13
+ * MIT License applies
+ */
+
 @replaceMethod(WorldMapMenuGameController)
   private final func TryTrackQuestOrSetWaypoint() -> Void {
-    // v1ld: set up the journal.TrackEntry(dummy) calls below which is how we untrack the journal quest 
+    // v1ld: set up how we untrack the journal quest with journal.TrackEntry(dummy) calls below  
     let journal: ref<JournalManager> = GameInstance.GetJournalManager(this.GetOwner().GetGame());
     let dummy: wref<JournalEntry>;
     if this.IsFastTravelEnabled() {
@@ -9,10 +13,11 @@
     if this.selectedMappin != null {
       if this.selectedMappin.IsInCollection() && this.selectedMappin.IsCollection() || !this.selectedMappin.IsInCollection() {
         if this.CanQuestTrackMappin(this.selectedMappin) {
-          // v1ld: unconditionally untrack any custom mappins since we're setting a quest mappin
-          this.UntrackCustomPositionMappin();
+          // v1ld: unconditionally untrack any other mappins since we're setting a quest mappin
+          // quest mappins also include gigs, vehicles and apartments
+          this.UntrackMappin();
           if !this.IsMappinQuestTracked(this.selectedMappin) {
-            // this.UntrackCustomPositionMappin();
+            this.UntrackCustomPositionMappin();
             this.TrackQuestMappin(this.selectedMappin);
             this.PlaySound(n"MapPin", n"OnEnable");
           };
@@ -27,7 +32,7 @@
                 this.UntrackMappin();
                 this.PlaySound(n"MapPin", n"OnDisable");
               } else {
-                // v1ld: untrack the journal quest
+                // v1ld: untrack the journal quest, this is a non-journal quest mappin type
                 journal.TrackEntry(dummy);
                 this.UntrackCustomPositionMappin();
                 this.TrackMappin(this.selectedMappin);
@@ -39,7 +44,7 @@
         this.UpdateSelectedMappinTooltip();
       };
     } else {
-      // v1ld: untrack the journal quest
+      // v1ld: untrack the journal quest, we're setting a custom mapping in a random spot
       journal.TrackEntry(dummy);
       this.TrackCustomPositionMappin();
     };
