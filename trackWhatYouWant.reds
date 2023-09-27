@@ -20,6 +20,7 @@
             this.UntrackCustomPositionMappin();
             this.TrackQuestMappin(this.selectedMappin);
             this.PlaySound(n"MapPin", n"OnEnable");
+            this.PlayRumble(RumbleStrength.SuperLight, RumbleType.Slow, RumblePosition.Right);
           };
         } else {
           if this.CanPlayerTrackMappin(this.selectedMappin) {
@@ -27,16 +28,19 @@
               this.UntrackCustomPositionMappin();
               this.SetSelectedMappin(null);
               this.PlaySound(n"MapPin", n"OnDisable");
+              this.PlayRumble(RumbleStrength.SuperLight, RumbleType.Pulse, RumblePosition.Right);
             } else {
               if this.selectedMappin.IsPlayerTracked() {
                 this.UntrackMappin();
                 this.PlaySound(n"MapPin", n"OnDisable");
+                this.PlayRumble(RumbleStrength.SuperLight, RumbleType.Pulse, RumblePosition.Right);
               } else {
                 // v1ld: untrack the journal quest, this is a non-journal quest mappin type
                 journal.TrackEntry(dummy);
                 this.UntrackCustomPositionMappin();
                 this.TrackMappin(this.selectedMappin);
                 this.PlaySound(n"MapPin", n"OnEnable");
+                this.PlayRumble(RumbleStrength.SuperLight, RumbleType.Slow, RumblePosition.Right);
               };
             };
           };
